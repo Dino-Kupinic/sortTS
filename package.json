@@ -1,0 +1,22 @@
+{
+  "name": "sortts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/cli.js",
+  "scripts": {
+    "build": "npx tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "sortts": "./dist/cli.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.1.3",
+    "boxen": "^7.1.0",
+    "chalk": "^5.2.0",
+    "typescript": "^5.0.4"
+  }
+}
