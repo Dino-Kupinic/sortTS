@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 import {Command} from "commander";
-import chalk from "chalk";
-import {sort} from "./sort";
+import {displayComplete, sort} from "./sort.js";
 
 const program = new Command();
 
@@ -14,7 +13,7 @@ program
 program
     .command("sort <destination>")
     .description("used to sort the files of the current directory into a separate directory that contains the sorted files")
-    .action(sort)
+    .action(await sort().then(() => displayComplete))
 
 
 program.parse(process.argv);
