@@ -17,12 +17,15 @@ program.command("sort")
     .option("-d, --date", "sort by date")
     .option("-a, --alphabet", "sort by alphabet")
     .action(async (dest: string, options: object) => {
-        const opts: string = JSON.stringify(options);
-        const obj = JSON.parse(opts);
-        let o: Settings = new Settings(obj.date, obj.size, obj.alphabet);
-        await sort(dest, o)
-            .then(() => displayComplete)
-            .catch(err => console.error(err));
+        const obj = JSON.parse(JSON.stringify(options));
+        const opts: Settings = new Settings(obj.date, obj.size, obj.alphabet);
+
+        try {
+            await sort(dest, opts);
+            displayComplete();
+        } catch (err) {
+            console.error(err);
+        }
     });
 
 
