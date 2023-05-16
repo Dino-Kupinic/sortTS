@@ -15,6 +15,7 @@ export async function sort(dest, options) {
     try {
         const response = await askProceed();
         if (!response) {
+            console.log(chalk.bgRedBright("exiting..."));
             process.exit(0);
         }
         console.log(chalk.green("\n> sorting current folder..."));
@@ -26,7 +27,7 @@ export async function sort(dest, options) {
 export async function askProceed() {
     return new Promise(async (resolve, reject) => {
         try {
-            const decision = await getInput(chalk.redBright("Continue with these settings? (y/n) \n"));
+            const decision = await getInput(chalk.redBright("> Continue with these settings? (y/n) \n"));
             resolve(decision);
         }
         catch (err) {

@@ -16,8 +16,8 @@ export async function sort(dest: string, options: Settings): Promise<void> {
     displaySettings();
     try {
         const response: boolean = await askProceed();
-        console.log(response)
         if (!response) {
+            console.log(chalk.bgRedBright("exiting..."));
             process.exit(0);
         }
         console.log(chalk.green("\n> sorting current folder..."));
@@ -29,7 +29,7 @@ export async function sort(dest: string, options: Settings): Promise<void> {
 export async function askProceed(): Promise<boolean> {
     return new Promise(async (resolve, reject): Promise<void> => {
         try {
-            const decision: boolean = await getInput(chalk.redBright("Continue with these settings? (y/n) \n"));
+            const decision: boolean = await getInput(chalk.redBright("> Continue with these settings? (y/n) \n"));
             resolve(decision);
         } catch (err) {
             reject(err);

@@ -6,10 +6,9 @@ const readLine = readline.createInterface({
 const prompt = (question) => new Promise((resolve) => readLine.question(question, resolve));
 export async function getInput(question) {
     return new Promise(async (resolve, reject) => {
-        let userDecision = false;
         try {
             const input = await prompt(question);
-            userDecision = input.toLowerCase() === "y" || input.toLowerCase() === "n";
+            let userDecision = input.toLowerCase() === "y";
             resolve(userDecision);
             readLine.close();
         }
