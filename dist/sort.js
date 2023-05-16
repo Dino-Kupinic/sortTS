@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import boxen from "boxen";
 import { SettingsDefaults } from "./settings.js";
+import { getInput } from "./input.js";
 let dir = "";
 let settings = SettingsDefaults;
 export async function sort(dest, options) {
@@ -9,21 +10,37 @@ export async function sort(dest, options) {
         settings.sortDate = options.sortDate;
         settings.sortAlphabet = options.sortAlphabet;
     }
-    console.log(chalk.cyan("\nWelcome to sortTS!") + chalk.green("\n> sorting current folder..."));
+    console.log(chalk.cyan("\n> Welcome to sortTS!\n"));
     displaySettings();
-    await askProceed();
+    try {
+        const response = await askProceed();
+        if (!response) {
+            process.exit(0);
+        }
+        console.log(chalk.green("\n> sorting current folder..."));
+    }
+    catch (err) {
+        console.error(err);
+    }
 }
 export async function askProceed() {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const decision = await getInput(chalk.redBright("Continue with these settings? (y/n) \n"));
+            resolve(decision);
+        }
+        catch (err) {
+            reject(err);
+        }
     });
 }
 export function displaySettings() {
     const text = chalk.magenta("sort by date: "
-        + chalk.whiteBright(settings.sortDate !== undefined ? settings.sortDate : "false") + "\n") +
+        + chalk.whiteBright(settings.sortDate !== undefined ? chalk.yellow(settings.sortDate) : "false") + "\n") +
         chalk.magenta("sort by size: "
-            + chalk.whiteBright(settings.sortSize !== undefined ? settings.sortSize : "false") + "\n") +
+            + chalk.whiteBright(settings.sortSize !== undefined ? chalk.yellow(settings.sortSize) : "false") + "\n") +
         chalk.magenta("sort by alphabet: "
-            + chalk.whiteBright(settings.sortAlphabet !== undefined ? settings.sortAlphabet : "false"));
+            + chalk.whiteBright(settings.sortAlphabet !== undefined ? chalk.yellow(settings.sortAlphabet) : "false"));
     console.log(boxen(text, {
         title: chalk.cyan("Settings"),
         padding: 0.5,
