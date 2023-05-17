@@ -16,17 +16,21 @@ export async function sort(dest: string, options: Settings): Promise<void> {
     displaySettings();
     try {
         const response: boolean = await askProceed();
-        if (!response) {
-            console.log(chalk.bgRedBright("exiting..."));
-            process.exit(0);
-        }
+        quitProgram(response);
         console.log(chalk.green("\n> sorting current folder..."));
     } catch (err) {
         console.error(err);
     }
 }
 
-export async function askProceed(): Promise<boolean> {
+function quitProgram(response: boolean): void {
+    if (!response) {
+        console.log(chalk.bgRedBright("exiting..."));
+        process.exit(0);
+    }
+}
+
+async function askProceed(): Promise<boolean> {
     return new Promise(async (resolve, reject): Promise<void> => {
         try {
             const decision: boolean = await getInput(chalk.redBright("> Continue with these settings? (y/n) \n"));
@@ -37,14 +41,15 @@ export async function askProceed(): Promise<boolean> {
     });
 }
 
-export function displaySettings(): void {
+function displaySettings(): void {
     const text: string =
         chalk.magenta("sort by date: "
             + chalk.whiteBright(settings.sortDate !== undefined ? chalk.yellow(settings.sortDate) : "false") + "\n") +
         chalk.magenta("sort by size: "
             + chalk.whiteBright(settings.sortSize !== undefined ? chalk.yellow(settings.sortSize) : "false") + "\n") +
         chalk.magenta("sort by alphabet: "
-            + chalk.whiteBright(settings.sortAlphabet !== undefined ? chalk.yellow(settings.sortAlphabet) : "false"));
+            + chalk.whiteBright(settings.sortAlphabet !== undefined ? chalk.yellow(settings.sortAlphabet) : "false") + "\n") +
+        chalk.magenta("directory: " + chalk.magentaBright(process.cwd()));
 
     console.log(
         boxen(text, {

@@ -14,17 +14,20 @@ export async function sort(dest, options) {
     displaySettings();
     try {
         const response = await askProceed();
-        if (!response) {
-            console.log(chalk.bgRedBright("exiting..."));
-            process.exit(0);
-        }
+        quitProgram(response);
         console.log(chalk.green("\n> sorting current folder..."));
     }
     catch (err) {
         console.error(err);
     }
 }
-export async function askProceed() {
+function quitProgram(response) {
+    if (!response) {
+        console.log(chalk.bgRedBright("exiting..."));
+        process.exit(0);
+    }
+}
+async function askProceed() {
     return new Promise(async (resolve, reject) => {
         try {
             const decision = await getInput(chalk.redBright("> Continue with these settings? (y/n) \n"));
@@ -35,13 +38,14 @@ export async function askProceed() {
         }
     });
 }
-export function displaySettings() {
+function displaySettings() {
     const text = chalk.magenta("sort by date: "
         + chalk.whiteBright(settings.sortDate !== undefined ? chalk.yellow(settings.sortDate) : "false") + "\n") +
         chalk.magenta("sort by size: "
             + chalk.whiteBright(settings.sortSize !== undefined ? chalk.yellow(settings.sortSize) : "false") + "\n") +
         chalk.magenta("sort by alphabet: "
-            + chalk.whiteBright(settings.sortAlphabet !== undefined ? chalk.yellow(settings.sortAlphabet) : "false"));
+            + chalk.whiteBright(settings.sortAlphabet !== undefined ? chalk.yellow(settings.sortAlphabet) : "false") + "\n") +
+        chalk.magenta("directory: " + chalk.magentaBright(process.cwd()));
     console.log(boxen(text, {
         title: chalk.cyan("Settings"),
         padding: 0.5,
