@@ -8,7 +8,7 @@ export async function getInput(question) {
     return new Promise(async (resolve, reject) => {
         try {
             const input = await prompt(question);
-            let userDecision = input.toLowerCase() === "y";
+            let userDecision = input.toLowerCase() === "y" || input === "";
             resolve(userDecision);
             readLine.close();
         }

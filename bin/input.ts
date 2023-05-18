@@ -11,7 +11,7 @@ export async function getInput(question: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
         try {
             const input: string = await prompt(question) as string;
-            let userDecision: boolean = input.toLowerCase() === "y";
+            let userDecision: boolean = input.toLowerCase() === "y" || input === "";
             resolve(userDecision);
             readLine.close();
         } catch (err) {

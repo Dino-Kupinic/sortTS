@@ -1,5 +1,21 @@
 import * as fs from "fs/promises";
 import * as path from "path";
+export async function createDirectory(creationPath) {
+    try {
+        await fs.mkdir(creationPath, { recursive: true });
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+export async function moveFileToDir(filePath, directoryPath) {
+    try {
+        await fs.rename(filePath, directoryPath);
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
 export async function readDirectory() {
     try {
         return await fs.readdir(process.cwd());
@@ -43,4 +59,4 @@ export async function getFileDate(filePath, detail) {
 export function getFileType(filePathIncludingFile) {
     return getFileInfos(filePathIncludingFile, "type");
 }
-//# sourceMappingURL=fileReader.js.map
+//# sourceMappingURL=fileHandler.js.map
