@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 import {Command} from "commander";
-import {displayComplete, sort} from "./sort.js";
-import {Settings} from "./settings.js";
+import {Settings} from "./model/settings.js";
+import {sort} from "./sort.js";
+import {displayComplete} from "./utils.js";
 
 const program = new Command();
 

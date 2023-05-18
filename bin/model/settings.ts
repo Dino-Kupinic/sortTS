@@ -2,6 +2,7 @@ export class Settings {
     private _sortDate?: boolean;
     private _sortSize?: boolean;
     private _sortAlphabet?: boolean;
+    private _sortType?: boolean;
 
     constructor(sortDate: boolean, sortSize: boolean, sortAlphabet: boolean) {
         this._sortDate = sortDate;
@@ -32,9 +33,18 @@ export class Settings {
     set sortAlphabet(value: boolean) {
         this._sortAlphabet = value;
     }
+
+    get sortType(): boolean {
+        return <boolean>this._sortType;
+    }
+
+    set sortType(value: boolean) {
+        this._sortType = value;
+    }
 }
 
 export const SettingsDefaults: Settings = {
+    sortType: true,
     sortDate: false,
     sortSize: false,
     sortAlphabet: false
