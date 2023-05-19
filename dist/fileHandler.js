@@ -1,5 +1,9 @@
 import * as fs from "fs/promises";
 import * as path from "path";
+/**
+ * asynchrounsly creates a directory at given path
+ * @param creationPath path where directory should be created
+ */
 export async function createDirectory(creationPath) {
     try {
         await fs.mkdir(creationPath, { recursive: true });
@@ -8,6 +12,11 @@ export async function createDirectory(creationPath) {
         console.error(err);
     }
 }
+/**
+ * asynchrounsly moves a file to a directory by renaming it.
+ * @param filePath path to the file
+ * @param directoryPath path to the output directory
+ */
 export async function moveFileToDir(filePath, directoryPath) {
     try {
         await fs.rename(filePath, directoryPath);
@@ -16,6 +25,9 @@ export async function moveFileToDir(filePath, directoryPath) {
         console.error(err);
     }
 }
+/**
+ * Reads a directory and returns an string array containing all files.
+ */
 export async function readDirectory() {
     try {
         return await fs.readdir(process.cwd());
@@ -24,6 +36,11 @@ export async function readDirectory() {
         console.error(err);
     }
 }
+/**
+ * Returns various information about a file.
+ * @param filePath path to the file
+ * @param details what should be returned
+ */
 async function getFileInfos(filePath, details) {
     try {
         const stats = await fs.stat(filePath);
@@ -43,6 +60,11 @@ async function getFileInfos(filePath, details) {
         console.error(err);
     }
 }
+/**
+ * Returns a string containing a day, month or year.
+ * @param filePath path to the file
+ * @param detail what detail of a full date should be returned. Possible options: "year", "day" or "month"
+ */
 export async function getFileDate(filePath, detail) {
     // e.g.:Thu May 18 2023 22:55:17 GMT+0200 (Central European Summer Time)
     const date = await getFileInfos(filePath, "date");
@@ -56,7 +78,29 @@ export async function getFileDate(filePath, detail) {
     }
     return date;
 }
+/**
+ * Returns the type of the file without the dot.
+ * @param filePathIncludingFile path to the file including the file and filetype (if any)
+ */
 export function getFileType(filePathIncludingFile) {
     return getFileInfos(filePathIncludingFile, "type");
+}
+/**
+ * Returns the size of the file in bytes as digits.
+ * @param filePathIncludingFile path to the file including the file and filetype (if any)
+ */
+export function getFileSizeInByte(filePathIncludingFile) {
+    return getFileInfos(filePathIncludingFile, "size");
+}
+/**
+ * Returns the size of the file in kilobytes as digits.
+ * @param filePathIncludingFile path to the file including the file and filetype (if any)
+ */
+export async function getFileSizeInKiloByte(filePathIncludingFile) {
+    const byteSize = await getFileInfos(filePathIncludingFile, "size");
+    if (byteSize != null) {
+        return (parseInt(byteSize) / 1000).toString();
+    }
+    return undefined;
 }
 //# sourceMappingURL=fileHandler.js.map

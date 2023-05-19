@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import {Settings, SettingsDefaults} from "./model/settings.js";
-import {askProceed, displaySettings, quitProgram} from "./utils.js";
+import {askOrderOfSorting, askProceedWithSettings, displaySettings, quitProgram} from "./utils.js";
 import {createDirectory, getFileType, moveFileToDir, readDirectory} from "./fileHandler.js";
 
 export let dir: string = "";
@@ -18,8 +18,11 @@ export async function sort(dest: string, options: Settings): Promise<void> {
     console.log(chalk.cyan("\n> Welcome to sortTS!\n"));
     displaySettings();
     try {
-        const response: boolean = await askProceed();
-        quitProgram(response);
+        const responseToContinue: boolean = await askProceedWithSettings();
+        quitProgram(responseToContinue);
+
+        const orderOfSorting: string = await askOrderOfSorting();
+        console.log(orderOfSorting);
         console.log(chalk.green("\n> sorting current folder..."));
 
         const files: string[] | undefined = await readDirectory();
