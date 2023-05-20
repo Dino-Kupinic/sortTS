@@ -34,13 +34,13 @@ export async function askOrderOfSorting() {
 }
 export function displaySettings() {
     const text = displaySettingsNumber(1) + chalk.magenta("sort by type: "
-        + chalk.whiteBright(settings.sortType !== undefined ? chalk.yellow(settings.sortType) : "false") + "\n") +
+        + chalk.whiteBright(chalk.yellow(settings.sortType)) + "\n") +
         displaySettingsNumber(2) + chalk.magenta("sort by date: "
-        + chalk.whiteBright(settings.sortDate !== undefined ? chalk.yellow(settings.sortDate) : "false") + "\n") +
+        + chalk.whiteBright(chalk.yellow(settings.sortDate)) + "\n") +
         displaySettingsNumber(3) + chalk.magenta("sort by size: "
-        + chalk.whiteBright(settings.sortSize !== undefined ? chalk.yellow(settings.sortSize) : "false") + "\n") +
+        + chalk.whiteBright(chalk.yellow(settings.sortSize)) + "\n") +
         displaySettingsNumber(4) + chalk.magenta("sort by alphabet: "
-        + chalk.whiteBright(settings.sortAlphabet !== undefined ? chalk.yellow(settings.sortAlphabet) : "false") + "\n\n") +
+        + chalk.whiteBright(chalk.yellow(settings.sortAlphabet)) + "\n\n") +
         boxen(chalk.magentaBright(process.cwd()), {
             title: chalk.cyanBright("output directory"),
             padding: 0.5,

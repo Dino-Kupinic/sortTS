@@ -13,13 +13,13 @@ export async function createDirectory(creationPath) {
     }
 }
 /**
- * asynchrounsly moves a file to a directory by renaming it.
+ * asynchrounsly moves a file to a directory.
  * @param filePath path to the file
  * @param directoryPath path to the output directory
  */
 export async function moveFileToDir(filePath, directoryPath) {
     try {
-        await fs.rename(filePath, directoryPath);
+        await fs.copyFile(filePath, directoryPath);
     }
     catch (err) {
         console.error(err);

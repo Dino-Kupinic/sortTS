@@ -7,15 +7,8 @@ export let dir: string = "";
 export let settings: Settings = SettingsDefaults;
 
 export async function sort(dest: string, options: Settings): Promise<void> {
-    if (options !== undefined) {
-        settings.sortSize = options.sortSize;
-        settings.sortDate = options.sortDate;
-        settings.sortAlphabet = options.sortAlphabet;
-    }
-    if (dest !== undefined) {
-        dir = dest;
-    }
-    console.log(chalk.cyan("\n> Welcome to sortTS!\n"));
+    configureSettings(options, dest);
+    displayWelcome();
     displaySettings();
     try {
         const responseToContinue: boolean = await askProceedWithSettings();
@@ -31,13 +24,40 @@ export async function sort(dest: string, options: Settings): Promise<void> {
                 await sortByType(file);
             }
         }
-
     } catch (err) {
         console.error(err);
     }
 }
 
-async function sortByType(file: string) {
+function checkOptionsDefined(opts: Settings): boolean {
+    return Object.values(opts).some(value => value !== undefined);
+}
+
+function convertUndefinedToFalse(opts: Settings): Settings {
+    Object.entries(opts).forEach(([key, value]) => {
+        if (value === undefined) {
+            opts[key as keyof Settings] = false;
+        }
+    });
+    return opts;
+}
+
+function configureSettings(options: Settings, dest: string): void {
+    if (checkOptionsDefined(options)) {
+        settings = convertUndefinedToFalse(options);
+    } else {
+        settings.sortType = true;
+    }
+    if (dest !== undefined) {
+        dir = dest;
+    }
+}
+
+function displayWelcome(): void {
+    console.log(chalk.cyan("\n> Welcome to sortTS!\n"));
+}
+
+async function sortByType(file: string): Promise<void> {
     let type: string | undefined = await getFileType(process.cwd() + "/" + file);
     if (type === "") {
         type = "other";

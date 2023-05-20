@@ -5,15 +5,8 @@ import { createDirectory, getFileType, moveFileToDir, readDirectory } from "./fi
 export let dir = "";
 export let settings = SettingsDefaults;
 export async function sort(dest, options) {
-    if (options !== undefined) {
-        settings.sortSize = options.sortSize;
-        settings.sortDate = options.sortDate;
-        settings.sortAlphabet = options.sortAlphabet;
-    }
-    if (dest !== undefined) {
-        dir = dest;
-    }
-    console.log(chalk.cyan("\n> Welcome to sortTS!\n"));
+    configureSettings(options, dest);
+    displayWelcome();
     displaySettings();
     try {
         const responseToContinue = await askProceedWithSettings();
@@ -31,6 +24,31 @@ export async function sort(dest, options) {
     catch (err) {
         console.error(err);
     }
+}
+function checkOptionsDefined(opts) {
+    return Object.values(opts).some(value => value !== undefined);
+}
+function convertUndefinedToFalse(opts) {
+    Object.entries(opts).forEach(([key, value]) => {
+        if (value === undefined) {
+            opts[key] = false;
+        }
+    });
+    return opts;
+}
+function configureSettings(options, dest) {
+    if (checkOptionsDefined(options)) {
+        settings = convertUndefinedToFalse(options);
+    }
+    else {
+        settings.sortType = true;
+    }
+    if (dest !== undefined) {
+        dir = dest;
+    }
+}
+function displayWelcome() {
+    console.log(chalk.cyan("\n> Welcome to sortTS!\n"));
 }
 async function sortByType(file) {
     let type = await getFileType(process.cwd() + "/" + file);

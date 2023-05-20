@@ -3,10 +3,11 @@ export class Settings {
     _sortSize;
     _sortAlphabet;
     _sortType;
-    constructor(sortDate, sortSize, sortAlphabet) {
+    constructor(sortDate, sortSize, sortAlphabet, sortType) {
         this._sortDate = sortDate;
         this._sortSize = sortSize;
         this._sortAlphabet = sortAlphabet;
+        this._sortType = sortType;
     }
     get sortDate() {
         return this._sortDate;

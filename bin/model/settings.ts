@@ -4,10 +4,11 @@ export class Settings {
     private _sortAlphabet?: boolean;
     private _sortType?: boolean;
 
-    constructor(sortDate: boolean, sortSize: boolean, sortAlphabet: boolean) {
+    constructor(sortDate: boolean, sortSize: boolean, sortAlphabet: boolean, sortType: boolean) {
         this._sortDate = sortDate;
         this._sortSize = sortSize;
         this._sortAlphabet = sortAlphabet;
+        this._sortType = sortType;
     }
 
     get sortDate(): boolean {
