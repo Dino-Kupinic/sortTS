@@ -1,7 +1,14 @@
 import chalk from "chalk";
 import {Settings, SettingsDefaults} from "./model/settings.js";
 import {askOrderOfSorting, askProceedWithSettings, displaySettings, quitProgram} from "./utils.js";
-import {createDirectory, getFileDate, getFileType, moveFileToDir, readDirectory} from "./fileHandler.js";
+import {
+    createDirectory,
+    getFileDate,
+    getFileSizeInKiloByte,
+    getFileType,
+    moveFileToDir,
+    readDirectory
+} from "./fileHandler.js";
 import {getStringInput} from "./input.js";
 
 export let dir: string = "";
@@ -24,7 +31,6 @@ export async function sort(dest: string, options: Settings): Promise<void> {
                 + chalk.white("Using default sort: ")
                 + chalk.yellowBright("1,2,3,4"));
         }
-
 
         await askWhatDateWhenDateTrue();
 
@@ -105,3 +111,46 @@ async function sortByDate(file: string, dateDetail: string): Promise<void> {
     await moveFileToDir(process.cwd() + "/" + file, dir + "/" + date + "/" + file);
 }
 
+async function sortByAlphabet(file: string, dateDetail: string): Promise<void> {
+    let firstLetter: string = "";
+    const regExPattern: RegExp = new RegExp("[A-Za-z]");
+    for (let i = 0; i < file.length; i++) {
+        if (file[i].match(regExPattern)) {
+            firstLetter = file[i];
+            break;
+        }
+    }
+    await console.log(file + " -> /" + firstLetter);
+    await createDirectory(dir + "/" + firstLetter);
+    await moveFileToDir(process.cwd() + "/" + file, dir + "/" + firstLetter + "/" + file);
+}
+
+const SIZE_50_MB_AS_KB: number = 50_000;
+const SIZE_500_MB_AS_KB: number = 500_000;
+const SMALL_FILES: string = "small_files";
+const MEDIUM_FILES: string = "medium_files";
+const BIG_FILES: string = "big_files";
+
+async function sortBySize(file: string): Promise<void> {
+    let size: string | undefined = await getFileSizeInKiloByte(process.cwd() + "/" + file);
+    if (size != undefined) {
+        let sizeAsNumber: number = parseInt(size);
+        switch (true) {
+            case sizeAsNumber <= SIZE_50_MB_AS_KB:
+                await console.log(file + " -> /" + SMALL_FILES);
+                await createDirectory(dir + "/" + SMALL_FILES);
+                await moveFileToDir(process.cwd() + "/" + file, dir + "/" + SMALL_FILES + "/" + file);
+                break;
+            case sizeAsNumber <= SIZE_500_MB_AS_KB:
+                await console.log(file + " -> /" + MEDIUM_FILES);
+                await createDirectory(dir + "/" + MEDIUM_FILES);
+                await moveFileToDir(process.cwd() + "/" + file, dir + "/" + MEDIUM_FILES + "/" + file);
+                break;
+            default:
+                await console.log(file + " -> /" + BIG_FILES);
+                await createDirectory(dir + "/" + BIG_FILES);
+                await moveFileToDir(process.cwd() + "/" + file, dir + "/" + BIG_FILES + "/" + file);
+                break;
+        }
+    }
+}
