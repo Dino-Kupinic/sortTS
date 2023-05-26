@@ -1,22 +1,34 @@
 import chalk from "chalk";
 import {Settings, SettingsDefaults} from "./model/settings.js";
 import {askOrderOfSorting, askProceedWithSettings, displaySettings, quitProgram} from "./utils.js";
-import {createDirectory, getFileType, moveFileToDir, readDirectory} from "./fileHandler.js";
+import {createDirectory, getFileDate, getFileType, moveFileToDir, readDirectory} from "./fileHandler.js";
+import {getStringInput} from "./input.js";
 
 export let dir: string = "";
 export let settings: Settings = SettingsDefaults;
 
 export async function sort(dest: string, options: Settings): Promise<void> {
-    configureSettings(options, dest);
-    displayWelcome();
-    displaySettings();
     try {
+        configureSettings(options, dest);
+        displayWelcome();
+        displaySettings();
+
         const responseToContinue: boolean = await askProceedWithSettings();
         quitProgram(responseToContinue);
 
         const orderOfSorting: string = await askOrderOfSorting();
-        console.log(orderOfSorting);
-        console.log(chalk.green("\n> sorting current folder..."));
+        if (checkValidOrderOfSorting(orderOfSorting)) {
+            console.log("valid");
+        } else {
+            console.log(chalk.redBright("Invalid Order. ")
+                + chalk.white("Using default sort: ")
+                + chalk.yellowBright("1,2,3,4"));
+        }
+
+
+        await askWhatDateWhenDateTrue();
+
+        displaySortingInProgress();
 
         const files: string[] | undefined = await readDirectory();
         if (files !== undefined) {
@@ -27,6 +39,25 @@ export async function sort(dest: string, options: Settings): Promise<void> {
     } catch (err) {
         console.error(err);
     }
+}
+
+function checkValidOrderOfSorting(orderOfSorting: string): boolean {
+    const regExPattern: RegExp = new RegExp("^[1-4],[1-4](?:,[1-4])*$");
+    return regExPattern.test(orderOfSorting);
+}
+
+async function askWhatDateWhenDateTrue(): Promise<string | undefined> {
+    const validAnswers: string[] = ["day", "month", "year"];
+    if (settings.sortDate) {
+        const answer: string = await getStringInput("What date should be sorted by? day, month or year:");
+        if (validAnswers.includes(answer)) {
+            return answer;
+        }
+    }
+}
+
+function displaySortingInProgress(): void {
+    console.log(chalk.green("\n> sorting current folder..."));
 }
 
 function checkOptionsDefined(opts: Settings): boolean {
@@ -65,5 +96,12 @@ async function sortByType(file: string): Promise<void> {
     await console.log(file + " -> /" + type);
     await createDirectory(dir + "/" + type);
     await moveFileToDir(process.cwd() + "/" + file, dir + "/" + type + "/" + file);
+}
+
+async function sortByDate(file: string, dateDetail: string): Promise<void> {
+    let date: string | undefined = await getFileDate(process.cwd() + "/" + file, dateDetail);
+    await console.log(file + " -> /" + date);
+    await createDirectory(dir + "/" + date);
+    await moveFileToDir(process.cwd() + "/" + file, dir + "/" + date + "/" + file);
 }
 
