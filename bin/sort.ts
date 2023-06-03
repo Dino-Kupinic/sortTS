@@ -23,23 +23,52 @@ export async function sort(dest: string, options: Settings): Promise<void> {
         const responseToContinue: boolean = await askProceedWithSettings();
         quitProgram(responseToContinue);
 
-        const orderOfSorting: string = await askOrderOfSorting();
+        let orderOfSorting: string = await askOrderOfSorting();
         if (checkValidOrderOfSorting(orderOfSorting)) {
             console.log("valid");
         } else {
             console.log(chalk.redBright("Invalid Order. ")
                 + chalk.white("Using default sort: ")
                 + chalk.yellowBright("1,2,3,4"));
+            orderOfSorting = "1,2,3,4";
         }
 
-        await askWhatDateWhenDateTrue();
+        const oof: number[] = [];
+        for (let i = 0; i < orderOfSorting.length; i++) {
+            if (orderOfSorting[i] === "1" ||
+                orderOfSorting[i] === "2" ||
+                orderOfSorting[i] === "3" ||
+                orderOfSorting[i] === "4") {
+                oof.push(parseInt(orderOfSorting[i]));
+            }
+        }
 
+        const date: string | undefined = await askWhatDateWhenDateTrue();
         displaySortingInProgress();
 
         const files: string[] | undefined = await readDirectory();
         if (files !== undefined) {
             for (const file of files) {
-                await sortByType(file);
+                for (let i = 0; i < oof.length; i++) {
+                    switch (i + 1) {
+                        case 1:
+                            await sortByType(file);
+                            break;
+                        case 2:
+                            if (date != null) {
+                                await sortByDate(file, date);
+                            } else {
+                                console.log(chalk.redBright("\nInvalid Date!"));
+                            }
+                            break;
+                        case 3:
+                            await sortBySize(file);
+                            break;
+                        case 4:
+                            await sortByAlphabet(file);
+                            break;
+                    }
+                }
             }
         }
     } catch (err) {
@@ -111,7 +140,7 @@ async function sortByDate(file: string, dateDetail: string): Promise<void> {
     await moveFileToDir(process.cwd() + "/" + file, dir + "/" + date + "/" + file);
 }
 
-async function sortByAlphabet(file: string, dateDetail: string): Promise<void> {
+async function sortByAlphabet(file: string): Promise<void> {
     let firstLetter: string = "";
     const regExPattern: RegExp = new RegExp("[A-Za-z]");
     for (let i = 0; i < file.length; i++) {

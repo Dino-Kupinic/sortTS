@@ -15,7 +15,7 @@ export async function createDirectory(creationPath: string): Promise<void> {
 }
 
 /**
- * asynchrounsly moves a file to a directory.
+ * asynchronously moves a file to a directory.
  * @param filePath path to the file
  * @param directoryPath path to the output directory
  */
@@ -108,4 +108,3 @@ export async function getFileSizeInKiloByte(filePathIncludingFile: string): Prom
     }
     return undefined;
 }
-

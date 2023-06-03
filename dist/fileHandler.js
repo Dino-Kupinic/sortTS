@@ -13,7 +13,7 @@ export async function createDirectory(creationPath) {
     }
 }
 /**
- * asynchrounsly moves a file to a directory.
+ * asynchronously moves a file to a directory.
  * @param filePath path to the file
  * @param directoryPath path to the output directory
  */
