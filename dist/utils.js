@@ -45,13 +45,13 @@ export function displaySettings() {
             title: chalk.cyanBright("output directory"),
             padding: 0.5,
             titleAlignment: "left",
-            borderStyle: "bold"
+            borderStyle: "bold",
         });
     console.log(boxen(text, {
         title: chalk.cyan("Settings"),
         padding: 0.5,
         titleAlignment: "center",
-        borderStyle: "bold"
+        borderStyle: "bold",
     }));
 }
 function displaySettingsNumber(num) {
@@ -62,7 +62,7 @@ export function displayComplete() {
         title: chalk.green("complete!"),
         titleAlignment: "center",
         padding: 0.5,
-        borderStyle: "bold"
+        borderStyle: "bold",
     }));
 }
 //# sourceMappingURL=utils.js.map

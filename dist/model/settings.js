@@ -38,6 +38,6 @@ export const SettingsDefaults = {
     sortType: true,
     sortDate: false,
     sortSize: false,
-    sortAlphabet: false
+    sortAlphabet: false,
 };
 //# sourceMappingURL=settings.js.map

@@ -19,7 +19,8 @@ export async function createDirectory(creationPath) {
  */
 export async function moveFileToDir(filePath, directoryPath) {
     try {
-        await fs.copyFile(filePath, directoryPath);
+        console.log(filePath + " -> " + directoryPath);
+        //await fs.copyFile(filePath, directoryPath);
     }
     catch (err) {
         console.error(err);

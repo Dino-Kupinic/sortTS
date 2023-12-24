@@ -1,7 +1,7 @@
-import readline from "readline";
+import * as readline from "readline";
 const readLine = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 const prompt = (question) => new Promise((resolve) => readLine.question(question, resolve));
 export async function getBooleanInput(question) {

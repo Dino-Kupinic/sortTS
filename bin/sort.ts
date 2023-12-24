@@ -34,11 +34,9 @@ export async function sort(dest: string, options: Settings): Promise<void> {
     }
 
     const oof: number[] = []
+    const validNumbers = ["1", "2", "3", "4"]
     for (let i = 0; i < orderOfSorting.length; i++) {
-      if (orderOfSorting[i] === "1" ||
-        orderOfSorting[i] === "2" ||
-        orderOfSorting[i] === "3" ||
-        orderOfSorting[i] === "4") {
+      if (validNumbers.includes(orderOfSorting[i])) {
         oof.push(parseInt(orderOfSorting[i]))
       }
     }
@@ -129,14 +127,14 @@ async function sortByType(file: string): Promise<void> {
   if (type === "") {
     type = "other"
   }
-  await console.log(file + " -> /" + type)
+  console.log(file + " -> /" + type)
   await createDirectory(dir + "/" + type)
   await moveFileToDir(process.cwd() + "/" + file, dir + "/" + type + "/" + file)
 }
 
 async function sortByDate(file: string, dateDetail: string): Promise<void> {
   let date: string | undefined = await getFileDate(process.cwd() + "/" + file, dateDetail)
-  await console.log(file + " -> /" + date)
+  console.log(file + " -> /" + date)
   await createDirectory(dir + "/" + date)
   await moveFileToDir(process.cwd() + "/" + file, dir + "/" + date + "/" + file)
 }
@@ -150,7 +148,7 @@ async function sortByAlphabet(file: string): Promise<void> {
       break
     }
   }
-  await console.log(file + " -> /" + firstLetter)
+  console.log(file + " -> /" + firstLetter)
   await createDirectory(dir + "/" + firstLetter)
   await moveFileToDir(process.cwd() + "/" + file, dir + "/" + firstLetter + "/" + file)
 }
@@ -167,17 +165,17 @@ async function sortBySize(file: string): Promise<void> {
     let sizeAsNumber: number = parseInt(size)
     switch (true) {
       case sizeAsNumber <= SIZE_50_MB_AS_KB:
-        await console.log(file + " -> /" + SMALL_FILES)
+        console.log(file + " -> /" + SMALL_FILES)
         await createDirectory(dir + "/" + SMALL_FILES)
         await moveFileToDir(process.cwd() + "/" + file, dir + "/" + SMALL_FILES + "/" + file)
         break
       case sizeAsNumber <= SIZE_500_MB_AS_KB:
-        await console.log(file + " -> /" + MEDIUM_FILES)
+        console.log(file + " -> /" + MEDIUM_FILES)
         await createDirectory(dir + "/" + MEDIUM_FILES)
         await moveFileToDir(process.cwd() + "/" + file, dir + "/" + MEDIUM_FILES + "/" + file)
         break
       default:
-        await console.log(file + " -> /" + BIG_FILES)
+        console.log(file + " -> /" + BIG_FILES)
         await createDirectory(dir + "/" + BIG_FILES)
         await moveFileToDir(process.cwd() + "/" + file, dir + "/" + BIG_FILES + "/" + file)
         break

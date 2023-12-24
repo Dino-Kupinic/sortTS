@@ -1,4 +1,5 @@
-import readline from "readline"
+import {createInterface} from "readline"
+import * as readline from "readline"
 
 const readLine = readline.createInterface({
   input: process.stdin,
@@ -13,7 +14,6 @@ export async function getBooleanInput(question: string): Promise<boolean> {
       const input: string = await prompt(question) as string
       let userDecision: boolean = input.toLowerCase() === "y" || input === ""
       resolve(userDecision)
-
     } catch (err) {
       reject(err)
     }
